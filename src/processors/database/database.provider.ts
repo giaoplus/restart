@@ -22,11 +22,6 @@ export const databaseProvider = {
             Logger.log('database connect success');
             clearTimeout(reConnectionTask);
             reConnectionTask = null;
-            emailService.sendMail({
-                to: EMAIL.admin,
-                subject: '数据库连接成功',
-                text: '<pre>服务启动，数据库连接成功！</pre>'
-            })
         })
 
         mongoose.connection.on('disconnected', () => {
@@ -37,6 +32,11 @@ export const databaseProvider = {
         mongoose.connection.on('error', (error) => {
             Logger.error(`database connection error: ${String(error)}`);
             Logger.log(String(error));
+            emailService.sendMail({
+                to: EMAIL.admin,
+                subject: '数据库崩溃！！！',
+                html: `<p>数据库崩了：</p><pre><code>${JSON.stringify(error)}</code></pre>`
+            })
         })
 
         return connection();

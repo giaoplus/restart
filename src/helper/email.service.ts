@@ -6,7 +6,8 @@ import { Logger } from 'src/utils/log4js';
 export interface mailOptions {
     to: string,
     subject: string,
-    text: string
+    text?: string,
+    html?: string
 }
 
 @Injectable()
