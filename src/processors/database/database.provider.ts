@@ -2,10 +2,11 @@ import { MONGODB, EMAIL } from '../../../app.config';
 import * as mongoose from 'mongoose';
 import { Logger } from 'src/utils/log4js';
 import { EmailService } from 'src/helper/email.service';
+import { MONGODB_CONNECTION } from 'src/config/db.config';
 
 export const databaseProvider = {
     inject: [EmailService],
-    provide: 'MongodbConnection',
+    provide: MONGODB_CONNECTION,
     useFactory: async (emailService: EmailService):Promise<typeof mongoose> => {
         let reConnectionTask = null;
 

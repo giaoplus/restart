@@ -1,7 +1,7 @@
 import { Document, Schema, Connection } from 'mongoose';
-import { MONGODB } from '../../../app.config';
+import { MONGODB_CONNECTION } from 'src/config/db.config';
 
-export interface User extends Document {
+export interface UserDoc extends Document {
     username: string;
     password: string;
     mobile: string;
@@ -23,9 +23,9 @@ const userSchema: Schema = new Schema({
     updateTime: { type: Date, default: Date.now }
 });
 
-export const UserModelName = 'mongodb_user';
-export const UserProviders = {
-    provide: UserModelName,
+export const UserProviderName = 'mongodb_user';
+export const UserProvider = {
+    provide: UserProviderName,
     useFactory: (connection: Connection) => connection.model('Users', userSchema),
-    inject: [MONGODB]
+    inject: [MONGODB_CONNECTION]
 };
