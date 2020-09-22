@@ -2,6 +2,18 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { UserProviderName, UserDoc } from './user.model';
 import { makeSalt, encryptPassword } from 'src/utils/cryptogram';
+import { RegisterDTO } from './user.dto';
+
+export interface User {
+    id: string;
+    username: string;
+    role: number;
+    status: number;
+    moible?: string;
+    email?: string;
+    createTime: string;
+    updateTime: string;
+}
 
 @Injectable()
 export class UserService {
@@ -14,7 +26,7 @@ export class UserService {
     }
 
     async findOneById(id: string): Promise<UserDoc> {
-        return this.userModel.findOne({ id }).exec();
+        return this.userModel.findOne({ _id: id }).exec();
     }
 
     async findOneByUsername(username: string): Promise<UserDoc> {
@@ -33,7 +45,7 @@ export class UserService {
         return this.userModel.create(user)
     }
 
-    async register(body: any) {
+    async register(body: RegisterDTO) {
         const { username, password, repassword, mobile, email } = body;
         
         if(password !== repassword) return { code: 400, msg: '两次密码不一致!' };
@@ -71,12 +83,13 @@ export class UserService {
         }
     }
 
-    async updateUser(id: string, email: string, mobile: string): Promise<UserDoc> {
+    async updateUser(body: any): Promise<UserDoc> {
+        const { id, email, mobile } = body;
         return this.userModel.updateOne({
+            _id: id
+        }, {
             email: email,
             mobile: mobile
-        }, {
-            _id: id
         });
     }
 }
